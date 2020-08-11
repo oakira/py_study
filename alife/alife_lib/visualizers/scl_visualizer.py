@@ -11,20 +11,20 @@ class SCLVisualizer(object):
 	
 	def __init__(self, width=600, height=600):
 		self._canvas = app.Canvas(size=(width, height), position=(0,0), keys='interactive', title="ALife book "+self.__class__.__name__)
-		self._canvas.events('draw').connect(self._on_draw)
-		self._canvas.events('resize').connect(self._on_resize)
+		self._canvas.events.draw.connect(self._on_draw)
+		self._canvas.events.resize.connect(self._on_resize)
 		vertex_shader = open(path.join(GLSL_PATH, 'scl_visualizer_vertex.glsl'), 'r').read()
 		fragment_shader = open(path.join(GLSL_PATH, 'scl_visualizer_fragment.glsl'), 'r').read()
 		self._render_program = gloo.Program(vertex_shader, fragment_shader)
-		gloo.GLContext().set_state('translucent', clear_color='white')
+		gloo.set_state('translucent', clear_color='white')
 		self._canvas.show()
-		gloo.GLContext().set_viewport(0, 0, *self._canvas.physical_size)
+		gloo.set_viewport(0, 0, *self._canvas.physical_size)
 
 	def _on_resize(self, event):
-		gloo.GLContext().set_viewport(0, 0, *self._canvas.physical_size)
+		gloo.set_viewport(0, 0, *self._canvas.physical_size)
 
 	def _on_draw(self, event):
-		gloo.GLContext().clear()
+		gloo.clear()
 		self._render_program.draw(gloo.gl.GL_POINTS)
 
 	def update(self, particle_data):
