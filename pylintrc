@@ -1,1 +1,1 @@
-init-hook="./alife/"
+init-hook=["./alife/"]
