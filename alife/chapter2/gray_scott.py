@@ -26,25 +26,29 @@ u = np.ones((SPACE_GRID_SIZE, SPACE_GRID_SIZE))
 v = np.zeros((SPACE_GRID_SIZE, SPACE_GRID_SIZE))
 # 中央にSQUARE_SIZE四方の正方形を置く
 SQUARE_SIZE = 20
-u[SPACE_GRID_SIZE//2-SQUARE_SIZE//2:SPACE_GRID_SIZE//2+SQUARE_SIZE//2,
-SPACE_GRID_SIZE//2-SQUARE_SIZE//2:SPACE_GRID_SIZE//2+SQUARE_SIZE//2] = 0.5
-v[SPACE_GRID_SIZE//2-SQUARE_SIZE//2:SPACE_GRID_SIZE//2+SQUARE_SIZE//2,
-SPACE_GRID_SIZE//2-SQUARE_SIZE//2:SPACE_GRID_SIZE//2+SQUARE_SIZE//2] = 0.25
+u[SPACE_GRID_SIZE // 2 - SQUARE_SIZE // 2:SPACE_GRID_SIZE // 2 +
+  SQUARE_SIZE // 2, SPACE_GRID_SIZE // 2 -
+  SQUARE_SIZE // 2:SPACE_GRID_SIZE // 2 + SQUARE_SIZE // 2] = 0.5
+v[SPACE_GRID_SIZE // 2 - SQUARE_SIZE // 2:SPACE_GRID_SIZE // 2 +
+  SQUARE_SIZE // 2, SPACE_GRID_SIZE // 2 -
+  SQUARE_SIZE // 2:SPACE_GRID_SIZE // 2 + SQUARE_SIZE // 2] = 0.25
 # 対称性を壊すために、少しノイズを入れる
-u += np.random.rand(SPACE_GRID_SIZE, SPACE_GRID_SIZE)*0.1
-v += np.random.rand(SPACE_GRID_SIZE, SPACE_GRID_SIZE)*0.1
+u += np.random.rand(SPACE_GRID_SIZE, SPACE_GRID_SIZE) * 0.1
+v += np.random.rand(SPACE_GRID_SIZE, SPACE_GRID_SIZE) * 0.1
 
 while visualizer:  # visualizerはウィンドウが閉じられるとFalseを返す
-	for i in range(VISUALIZATION_STEP):
-		# ラプラシアンの計算
-		laplacian_u = (np.roll(u, 1, axis=0) + np.roll(u, -1, axis=0) +
-					np.roll(u, 1, axis=1) + np.roll(u, -1, axis=1) - 4*u) / (dx*dx)
-		laplacian_v = (np.roll(v, 1, axis=0) + np.roll(v, -1, axis=0) +
-					np.roll(v, 1, axis=1) + np.roll(v, -1, axis=1) - 4*v) / (dx*dx)
-		# Gray-Scottモデル方程式
-		dudt = Du*laplacian_u - u*v*v + f*(1.0-u)
-		dvdt = Dv*laplacian_v + u*v*v - (f+k)*v
-		u += dt * dudt
-		v += dt * dvdt
-	# 表示をアップデート
-	visualizer.update(u)
+    for i in range(VISUALIZATION_STEP):
+        # ラプラシアンの計算
+        laplacian_u = (np.roll(u, 1, axis=0) + np.roll(u, -1, axis=0) +
+                       np.roll(u, 1, axis=1) + np.roll(u, -1, axis=1) -
+                       4 * u) / (dx * dx)
+        laplacian_v = (np.roll(v, 1, axis=0) + np.roll(v, -1, axis=0) +
+                       np.roll(v, 1, axis=1) + np.roll(v, -1, axis=1) -
+                       4 * v) / (dx * dx)
+        # Gray-Scottモデル方程式
+        dudt = Du * laplacian_u - u * v * v + f * (1.0 - u)
+        dvdt = Dv * laplacian_v + u * v * v - (f + k) * v
+        u += dt * dudt
+        v += dt * dvdt
+    # 表示をアップデート
+    visualizer.update(u)
